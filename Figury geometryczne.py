@@ -69,27 +69,42 @@ class Square(Figura):
 
 
 class Triangle(Figura):
-    def __init__(self, a, h):
+    def __init__(self, a, b, c):
+        self.c = c
+        self.b = b
         self.a = a
-        self.h = h
 
     def area(self):
-        area = (self.a * self.h)/2
+        p = (self.a + self.b + self.c)/2
+        area = np.sqrt(p*(p - self.a)*(p - self.b)*(p - self.c))
         return area
 
     def circuit(self):
-        circuit = self.a + 2 * ((self.a/2) ** 2 + self.h ** 2) ** 0.5
+        circuit = self.a + self.b + self.c
         return circuit
 
     def figure(self):
         return "TRÓJKĄT"
 
-fig1 = Circle(3)
-fig2 = Rectangle(3,4)
-fig3 = Square(2)
-fig4 = Triangle(6,2)
 
-fig1.przedstaw_sie()
-fig2.przedstaw_sie()
-fig3.przedstaw_sie()
-fig4.przedstaw_sie()
+def main():
+    fig1 = Circle(3)
+    fig2 = Rectangle(3, 4)
+    fig3 = Square(2)
+    fig4 = Triangle(4, 5, 7)
+
+    fig1.przedstaw_sie()
+    fig2.przedstaw_sie()
+    fig3.przedstaw_sie()
+    fig4.przedstaw_sie()
+
+    fig_list = [fig1, fig2, fig3, fig4]
+    sum_area = 0
+    sum_circuit = 0
+    for f in fig_list:
+        sum_area += f.area()
+        sum_circuit += f.circuit()
+
+
+if __name__ == "__main__":
+    main()
