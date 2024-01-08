@@ -11,7 +11,7 @@ class Wezel(ABC):
         pass
 
     def wypisz(self):
-        print(f"Właśnie wykonuje {self.nazwa()}")
+        print(f"Właśnie wykonuje {self.nazwa()}", end=' ')
 
 
 class Liczba(Wezel):
@@ -26,7 +26,7 @@ class Liczba(Wezel):
         return 'liczbą'
 
     def wypisz(self):
-        print(f"Jestem liczbą {self.oblicz_wartosc()}")
+        print(f"Jestem liczbą {self.liczba}")
 
 
 class Suma(Wezel):
@@ -42,8 +42,10 @@ class Suma(Wezel):
         return 'dodawanie'
 
     def wypisz(self):
-        print(f"Właśnie dodaje {self.a.oblicz_wartosc()} i {self.b.oblicz_wartosc()} a ich suma to {self.oblicz_wartosc()}")
-
+        self.a.wypisz()
+        self.b.wypisz()
+        super().wypisz()
+        print(f"{self.a.oblicz_wartosc()}+{self.b.oblicz_wartosc()}={self.oblicz_wartosc()}")
 
 class Roznica(Wezel):
 
@@ -51,15 +53,17 @@ class Roznica(Wezel):
         self.a = a
         self.b = b
 
-    def oblicz_wartosc(self, a, b):
+    def oblicz_wartosc(self):
         return self.a.oblicz_wartosc() - self.b.oblicz_wartosc()
 
     def nazwa(self):
         return 'odejmowanie'
 
     def wypisz(self):
-        print(f"Właśnie odejmuje {self.a.oblicz_wartosc()} i {self.b.oblicz_wartosc()} a ich różnica to {self.oblicz_wartosc()}")
-
+        self.a.wypisz()
+        self.b.wypisz()
+        super().wypisz()
+        print(f"{self.a.oblicz_wartosc()}-{self.b.oblicz_wartosc()}={self.oblicz_wartosc()}")
 
 class Iloczyn(Wezel):
 
@@ -74,23 +78,27 @@ class Iloczyn(Wezel):
         return 'mnożenie'
 
     def wypisz(self):
-        print(f"Właśnie mnożę {self.a.oblicz_wartosc()} i {self.b.oblicz_wartosc()} a ich iloczyn to {self.oblicz_wartosc()}")
-
+        self.a.wypisz()
+        self.b.wypisz()
+        super().wypisz()
+        print(f"{self.a.oblicz_wartosc()}*{self.b.oblicz_wartosc()}={self.oblicz_wartosc()}")
 class Iloraz(Wezel):
 
     def __init__(self, a, b):
         self.a = a
         self.b = b
 
-    def oblicz_wartosc(self, a, b):
+    def oblicz_wartosc(self):
         return self.a.oblicz_wartosc() / self.b.oblicz_wartosc()
 
     def nazwa(self):
         return 'dzielenie'
 
     def wypisz(self):
-        print(f"Właśnie dzielę {self.a.oblicz_wartosc()} i {self.b.oblicz_wartosc()} a ich iloraz to {self.oblicz_wartosc()}")
-
+        self.a.wypisz()
+        self.b.wypisz()
+        super().wypisz()
+        print(f"{self.a.oblicz_wartosc()}/{self.b.oblicz_wartosc()}={self.oblicz_wartosc()}")
 
 class Silnia(Wezel):
 
@@ -98,7 +106,7 @@ class Silnia(Wezel):
         self.a = a
 
     def oblicz_wartosc(self):
-        return math.factorial(self.a.oblicz_wartosc())
+        return math.factorial(int(self.a.oblicz_wartosc()))
 
     def nazwa(self):
         return 'silnia'
@@ -106,19 +114,18 @@ class Silnia(Wezel):
     def wypisz(self):
         self.a.wypisz()
         super().wypisz()
-        print(f"Właśnie obliczam silnię {self.a.oblicz_wartosc()}, a wynik to {self.oblicz_wartosc()}")
-
+        print(f"{self.a.oblicz_wartosc()}!={self.oblicz_wartosc()}")
 
 def main():
-    minus_jeden = Liczba(-1)
+    minus_jeden = Liczba(1)
     cztery = Liczba(4)
     piec = Liczba(5)
     siedem = Liczba(7)
     osiem = Liczba(8)
 
     dodawanie = Suma(piec, siedem)
-    odejmowanie = Roznica(osiem, cztery)
-    mnozenie = Iloczyn(dodawanie, odejmowanie)
+    odejmowanie = Roznica(dodawanie, cztery)
+    mnozenie = Iloczyn(odejmowanie, osiem)
     dzielenie = Iloraz(mnozenie, minus_jeden)
     silnia = Silnia(dzielenie)
 
