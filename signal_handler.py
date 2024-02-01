@@ -14,6 +14,7 @@ def exit_handler(sig, frame):
 for sig in signal.Signals:
 	print(sig.value,signal.Signals(sig).name)
 	signal.signal(signal.SIGTERM, exit_handler)
+
 	#if sig == 9 or sig == 19 :continue
 	#signal.signal(sig, exit_handler)
 
