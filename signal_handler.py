@@ -2,19 +2,26 @@
 import time
 import datetime
 import signal
+signal_status = 0
+
 
 def exit_handler(sig, frame):
-	signame = signal.Signals(sig).name
-	#print(f'Signal handler called with signal {signame} ({sig})')
 	print("Signal recive: ",sig)
-	exit()
+	global signal_status
+	signal_status = sig
+	#exit()
 
 for sig in signal.Signals:
-	print(sig,signal.Signals(sig).name)
-	signal.signal(sig, exit_handler)
-exit()
+	print(sig.value,signal.Signals(sig).name)
+	signal.signal(signal.SIGTERM, exit_handler)
+	#if sig == 9 or sig == 19 :continue
+	#signal.signal(sig, exit_handler)
+
 
 while True:
-	print(datetime.datetime.now(),"Import transaction")
+	print(datetime.datetime.now(),"Import transaction", signal_status)
 	time.sleep(1)
-	print(datetime.datetime.now(),"Finish transaction")
+	print(datetime.datetime.now(),"Finish transaction",signal_status)
+	if signal_status  != 0:
+		print("Grace exit")
+		exit()
