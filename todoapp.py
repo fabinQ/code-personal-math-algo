@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData, create_engine
+import os
+
+
+file_path = os.path.join(os.path.abspath(os.getcwd()), 'temp', 'todo2.db')
+print(file_path)
 
 engine = create_engine("sqlite:///todo2.db")
 metadata_obj = MetaData()
@@ -8,7 +13,7 @@ metadata_obj = MetaData()
 
 app = Flask(__name__)
 # Ustalamy gdzie będzie nasza baza danych. Robimy to przez app.config
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///temp\\todo2.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + file_path
 db = SQLAlchemy(app)
 
 
