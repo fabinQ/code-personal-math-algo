@@ -12,7 +12,7 @@ print(file_path)
 
 
 app = Flask(__name__)
-app.app_context().push()
+app.app_context()
 # Ustalamy gdzie będzie nasza baza danych. Robimy to przez app.config
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + file_path
 
