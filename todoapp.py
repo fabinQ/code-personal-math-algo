@@ -12,7 +12,7 @@ print(file_path)
 
 
 app = Flask(__name__)
-
+app.app_context().push()
 # Ustalamy gdzie będzie nasza baza danych. Robimy to przez app.config
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + file_path
 
@@ -29,6 +29,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
 
+# db.create_all()
 
 @app.route("/", methods=['GET', 'POST'])
 def todo():
