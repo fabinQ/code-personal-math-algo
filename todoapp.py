@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 # from sqlalchemy import MetaData, create_engine
 import os
@@ -30,7 +30,7 @@ class Task(db.Model):
     name = db.Column(db.String, nullable=False)
 
     def to_dic(self):
-        return {"id": self.id, "name":self.name}
+        return {"id": self.id, "name": self.name}
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -43,8 +43,28 @@ def todo():
     tasks = Task.query.all()
     return render_template('todo.html', tasks=tasks)
 
+
 @app.route("/api/task", methods=['GET'])
 def list_tasks():
     tasks = Task.query.all()
     tasks_data = [task.to_dic() for task in tasks]
     return jsonify(tasks_data)
+
+
+@app.route("/api/task", methods=['POST'])
+def create_task():
+    task_name = request.json["name"]
+    task = Task(name= task_name)
+    db.session.add(task)
+    db.session.commit()
+    response_data = jsonify(task.to_dic())
+    return make_response(response_data, 201)
+
+@app.route("/api/task/<int:task_id>", methods=['GET'])
+def task_details(task_id):
+    task = Task.query.get(task_id)
+    print(task)
+    if task is None:
+        return make_response("", 404)
+    else:
+        return jsonify(task.to_dic())
