@@ -29,7 +29,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
 
-    def to_dic(self):
+    def to_dict(self):
         return {"id": self.id, "name": self.name}
 
 
@@ -47,7 +47,7 @@ def todo():
 @app.route("/api/task", methods=['GET'])
 def list_tasks():
     tasks = Task.query.all()
-    tasks_data = [task.to_dic() for task in tasks]
+    tasks_data = [task.to_dict() for task in tasks]
     return jsonify(tasks_data)
 
 
@@ -57,7 +57,7 @@ def create_task():
     task = Task(name= task_name)
     db.session.add(task)
     db.session.commit()
-    response_data = jsonify(task.to_dic())
+    response_data = jsonify(task.to_dict())
     return make_response(response_data, 201)
 
 @app.route("/api/task/<int:task_id>", methods=['GET'])
@@ -67,4 +67,22 @@ def task_details(task_id):
     if task is None:
         return make_response("", 404)
     else:
-        return jsonify(task.to_dic())
+        return jsonify(task.to_dict())
+
+@app.route("/api/task/<int:task_id>", methods=['PUT'])
+def modify_task(task_id):
+    '''1. pobieramy zadanie z bazy
+    2. pobieramy nową nazwę
+    3. aktualizujemy baze
+    '''
+    task = Task.query.get_or_404(task_id)   # to samo co task details tylko jako wbudowana funkcja
+    task.name = request.json["name"]
+    db.session.commit()
+    return jsonify(task.to_dict())
+
+@app.route("/api/task/<int:task_id>", methods=["DELETE"])
+def del_task(task_id):
+    task =  Task.query.get_or_404(task_id)
+    db.session.delete(task)
+    db.session.commit()
+    return make_response("", 204)
