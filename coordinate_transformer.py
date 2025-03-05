@@ -39,4 +39,4 @@ converted_stations = {}
 for name, (X, Y, Z) in stations_dic.items():
     easting, northing, height = transformer.transform(X, Y, Z)
     converted_stations[name] = (easting, northing)
-    print(f"{name}: {easting:.3f}, {northing:.3f}")
+    print(f"{name}: {northing:.3f}, {easting:.3f}")
